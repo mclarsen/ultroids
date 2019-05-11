@@ -1,0 +1,6 @@
+[submodule "src/CHAI"]
+	path = src/CHAI
+	url = https://github.com/LLNL/CHAI
+[submodule "src/blt"]
+	path = src/blt
+	url = https://github.com/LLNL/blt.git
