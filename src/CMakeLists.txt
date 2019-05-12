@@ -9,7 +9,7 @@ cmake_policy(SET CMP0048 NEW)
 
 
 ################################
-# Ascent
+# Ultroids
 ################################
 
 project(ultroids VERSION "0.0.1")
@@ -26,6 +26,7 @@ option(ENABLE_OPENMP      "Build OpenMP Support"      OFF)
 set(ENABLE_TESTS OFF CACHE Bool "")
 set(ENABLE_EXAMPLES OFF CACHE Bool "")
 set(ENABLE_DOCUMENTATION OFF CACHE Bool "")
+
 ################################
 # Set BLT Options
 ################################
@@ -49,6 +50,9 @@ endif()
 include(${BLT_SOURCE_DIR}/SetupBLT.cmake)
 
 add_subdirectory(CHAI)
+# tell RAJA about CHAI
+set(ENABLE_CHAI ON CACHE BOOL "")
+set(CHAI_DIR "CHAI")
 add_subdirectory(RAJA)
 
 ################################

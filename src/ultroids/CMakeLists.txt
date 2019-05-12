@@ -1,6 +1,6 @@
 set(ultroids_sources ultroids.cpp)
 
-set(ultroids_thirdparty_libs chai umpire)
+set(ultroids_thirdparty_libs chai umpire RAJA)
 
 if(CUDA_FOUND)
     list(APPEND ultroids_thirdparty_libs cuda_runtime)
