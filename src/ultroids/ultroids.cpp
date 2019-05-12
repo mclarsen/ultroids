@@ -21,9 +21,9 @@ void reset(Particle &p)
 
 void add_force(Particle &a, const Particle &b)
 {
-  const double dx = a.m_px - b.m_px;
-  const double dy = a.m_py - b.m_py;
-  const double dz = a.m_pz - b.m_pz;
+  const double dx = b.m_px - a.m_px;
+  const double dy = b.m_py - a.m_py;
+  const double dz = b.m_pz - a.m_pz;
   double dist_sq = dx * dx + dy * dy + dz * dz;
   if(dist_sq == 0.)
   {
@@ -109,15 +109,25 @@ void write_particles(chai::ManagedArray<Particle> &particles)
   }
 
   file<<"POINT_DATA "<<num_particles<<"\n";
-  file<<"SCALAR velocity_mag double"<<num_particles<<"\n";
+  file<<"SCALARS velocity_mag float\n";
   file<<"LOOKUP_TABLE default\n";
   for(int i = 0; i < num_particles; ++i)
   {
     const Particle &p = particles[i];
-    double mag = sqrt(p.m_vx * p.m_vx + p.m_vy * p.m_vy + p.m_vy + p.m_vz * p.m_vz);;
+    double dist_sq = p.m_vx * p.m_vx + p.m_vy * p.m_vy + p.m_vy + p.m_vz * p.m_vz;
+    double mag = sqrt(mag);
     file<<mag<<"\n";
   }
-  file<<"VECTORS velocity double"<<num_particles<<"\n";
+
+  file<<"SCALARS mass float\n";
+  file<<"LOOKUP_TABLE default\n";
+  for(int i = 0; i < num_particles; ++i)
+  {
+    const Particle &p = particles[i];
+    file<<p.m_mass<<"\n";
+  }
+
+  file<<"VECTORS velocity float\n";
   for(int i = 0; i < num_particles; ++i)
   {
     file<<particles[i].m_vx<<" ";
@@ -132,8 +142,8 @@ void write_particles(chai::ManagedArray<Particle> &particles)
 int main(void)
 {
   std::cout<<"hello\n";
-  const int size = 20;
-  const int steps = 10;
+  const int size = 100;
+  const int steps = 10000;
   const double delta_t = 0.5;
   chai::ManagedArray<Particle> particles(size);
   init_particles(particles);
@@ -150,7 +160,6 @@ int main(void)
             add_force(particle, particles[p]);
           }
         }
-
         advance(particle, delta_t);
     });
   }
